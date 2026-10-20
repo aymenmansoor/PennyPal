@@ -160,4 +160,60 @@ class AuthService {
     }
     await _auth.signOut();
   }
+
+  Future<void> reauthenticate({String? password}) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'no-current-user',
+        message: 'No signed-in account is available.',
+      );
+    }
+
+    final providers = user.providerData.map((provider) => provider.providerId);
+    if (providers.contains('password')) {
+      if (password == null || password.isEmpty) {
+        throw FirebaseAuthException(
+          code: 'password-required',
+          message: 'Enter your current password to continue.',
+        );
+      }
+      await user.reauthenticateWithCredential(
+        EmailAuthProvider.credential(
+          email: user.email ?? '',
+          password: password,
+        ),
+      );
+      return;
+    }
+
+    if (providers.contains('google.com')) {
+      if (kIsWeb) {
+        final provider = GoogleAuthProvider()
+          ..setCustomParameters({'prompt': 'select_account'});
+        await user.reauthenticateWithPopup(provider);
+      } else {
+        final googleUser = await GoogleSignIn().signIn();
+        if (googleUser == null) {
+          throw FirebaseAuthException(
+            code: 'google-reauth-cancelled',
+            message: 'Google reauthentication was cancelled.',
+          );
+        }
+        final googleAuth = await googleUser.authentication;
+        await user.reauthenticateWithCredential(
+          GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
+          ),
+        );
+      }
+      return;
+    }
+
+    throw FirebaseAuthException(
+      code: 'reauthentication-unavailable',
+      message: 'This account cannot be reauthenticated automatically.',
+    );
+  }
 }

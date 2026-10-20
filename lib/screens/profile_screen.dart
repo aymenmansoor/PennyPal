@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../core/app_theme.dart';
 import '../services/auth_service.dart';
+import '../services/account_deletion_service.dart';
 import '../services/firestore_service.dart';
 import '../widgets/responsive_layout.dart';
 
@@ -59,8 +60,12 @@ class ProfileScreen extends StatelessWidget {
     if (!ok) return;
     try {
       final user = FirebaseAuth.instance.currentUser!;
-      await FirestoreService.instance.deleteAllUserData(user.uid);
-      await user.delete();
+      final needsPassword = user.providerData.any(
+        (provider) => provider.providerId == 'password',
+      );
+      final password = needsPassword ? await _requestPassword(context) : null;
+      if (password == null && needsPassword) return;
+      await AccountDeletionService.firebase().delete(password: password);
     } on FirebaseAuthException catch (e) {
       if (context.mounted)
         ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +77,41 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         );
+    } catch (_) {
+      if (context.mounted)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account deletion failed. Please try again.')),
+        );
     }
+  }
+
+  Future<String?> _requestPassword(BuildContext context) async {
+    final controller = TextEditingController();
+    final password = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Confirm your password'),
+        content: TextField(
+          controller: controller,
+          obscureText: true,
+          autofocus: true,
+          onSubmitted: (_) => Navigator.pop(dialogContext, controller.text),
+          decoration: const InputDecoration(labelText: 'Current password'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, controller.text),
+            child: const Text('Continue'),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    return password?.trim();
   }
 
   @override

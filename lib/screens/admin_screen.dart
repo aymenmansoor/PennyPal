@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../core/app_theme.dart';
 import '../services/auth_service.dart';
+import '../services/admin_support_service.dart';
 import '../main.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -22,6 +23,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
   final searchCtl = TextEditingController();
   final emailCtl = TextEditingController();
+  final supportService = AdminSupportService.firestore();
 
   static const names = [
     'Dashboard',
@@ -884,16 +886,23 @@ class _AdminScreenState extends State<AdminScreen> {
                         toast('Write a reply first.');
                         return;
                       }
-                      await document.reference.update({
-                        'adminReply': reply,
-                        'repliedAt': FieldValue.serverTimestamp(),
-                        'updatedAt': FieldValue.serverTimestamp(),
-                      });
-                      await audit('reply_support', document.id);
-                      if (mounted)
-                        toast(
-                          'Reply saved. The student can see it in Support and Notifications.',
+                      try {
+                        await supportService.saveReply(
+                          supportId: document.id,
+                          reply: reply,
                         );
+                        if (mounted) {
+                          toast(
+                            'Reply saved. The student can see it in Support and Notifications.',
+                          );
+                        }
+                      } on AdminSupportException catch (error) {
+                        if (mounted) toast(error.message);
+                      } catch (_) {
+                        if (mounted) {
+                          toast('The support reply could not be completed.');
+                        }
+                      }
                     },
                     icon: const Icon(Icons.send_rounded),
                     label: const Text('Save reply'),

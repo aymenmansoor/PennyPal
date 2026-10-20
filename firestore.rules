@@ -6,35 +6,147 @@ service cloud.firestore {
     function myUser() { return get(/databases/$(database)/documents/users/$(request.auth.uid)); }
     function isAdmin() { return signedIn() && myUser().data.role in ['admin', 'superAdmin']; }
     function isSuperAdmin() { return signedIn() && myUser().data.role == 'superAdmin'; }
+    function changed(fields) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(fields); }
+
+    function validUserProfile() {
+      return request.resource.data.keys().hasOnly([
+        'name', 'email', 'mobile', 'role', 'countryCode', 'currencyCode',
+        'currencySymbol', 'notificationsEnabled', 'onboardingComplete',
+        'createdAt', 'updatedAt'
+      ]) && request.resource.data.role in ['user', 'student', 'admin', 'superAdmin'];
+    }
+
+    function validTransaction(uid) {
+      return request.resource.data.keys().hasOnly([
+        'userId', 'type', 'amount', 'category', 'description', 'date',
+        'recurrence', 'updatedAt'
+      ]) && request.resource.data.userId == uid
+        && request.resource.data.type in ['income', 'expense']
+        && request.resource.data.amount is number
+        && request.resource.data.amount > 0
+        && request.resource.data.category is string
+        && request.resource.data.description is string
+        && request.resource.data.date is timestamp
+        && request.resource.data.recurrence in ['none', 'weekly', 'monthly'];
+    }
+
+    function validBudget(uid) {
+      return request.resource.data.keys().hasOnly([
+        'userId', 'month', 'category', 'limitAmount', 'updatedAt'
+      ]) && request.resource.data.userId == uid
+        && request.resource.data.month is string
+        && request.resource.data.category is string
+        && request.resource.data.limitAmount is number
+        && request.resource.data.limitAmount > 0;
+    }
+
+    function validGoal(uid) {
+      return request.resource.data.keys().hasOnly([
+        'userId', 'name', 'targetAmount', 'currentAmount',
+        'monthlyContribution', 'targetDate', 'status', 'updatedAt'
+      ]) && request.resource.data.userId == uid
+        && request.resource.data.name is string
+        && request.resource.data.targetAmount is number
+        && request.resource.data.targetAmount > 0
+        && request.resource.data.currentAmount is number
+        && request.resource.data.currentAmount >= 0
+        && request.resource.data.monthlyContribution is number
+        && request.resource.data.monthlyContribution >= 0
+        && request.resource.data.targetDate is timestamp
+        && request.resource.data.status in ['active', 'completed'];
+    }
+
+    function validCategory() {
+      return request.resource.data.keys().hasOnly([
+        'type', 'name', 'colorValue', 'iconName', 'createdAt'
+      ]) && request.resource.data.type in ['income', 'expense']
+        && request.resource.data.name is string;
+    }
 
     match /users/{uid} {
-      allow create: if isOwner(uid) && request.resource.data.role in ['user', 'student'];
+      allow create: if isOwner(uid) && validUserProfile()
+        && request.resource.data.role in ['user', 'student'];
       allow read: if isOwner(uid) || isAdmin();
-      allow update: if ((isOwner(uid) || isAdmin()) && request.resource.data.role == resource.data.role) || isSuperAdmin();
+      allow update: if isSuperAdmin()
+        || ((isOwner(uid) || isAdmin())
+          && changed([
+            'name', 'email', 'mobile', 'countryCode', 'currencyCode',
+            'currencySymbol', 'notificationsEnabled', 'onboardingComplete',
+            'updatedAt'
+          ])
+          && request.resource.data.role == resource.data.role);
       allow delete: if isOwner(uid) || isSuperAdmin();
-      match /transactions/{docId} { allow read, write: if isOwner(uid); }
-      match /budgets/{docId} { allow read, write: if isOwner(uid); }
-      match /savingsGoals/{docId} { allow read, write: if isOwner(uid); }
-      match /categories/{docId} { allow read, write: if isOwner(uid); }
-      match /{subcollection}/{docId} {
-        allow read, write: if isOwner(uid);
+
+      match /transactions/{docId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && validTransaction(uid);
+        allow delete: if isOwner(uid);
+      }
+      match /budgets/{docId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && validBudget(uid);
+        allow delete: if isOwner(uid);
+      }
+      match /savingsGoals/{docId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && validGoal(uid);
+        allow delete: if isOwner(uid);
+      }
+      match /categories/{docId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && validCategory();
+        allow delete: if isOwner(uid);
+      }
+      match /devices/{docId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['token', 'updatedAt'])
+          && request.resource.data.token is string;
+        allow delete: if isOwner(uid);
       }
     }
+
     match /activityEvents/{id} {
-      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          'userId', 'event', 'transactionType', 'createdAt'
+        ])
+        && request.resource.data.event is string;
       allow read: if isAdmin();
       allow update, delete: if false;
     }
+
     match /supportQueries/{id} {
-      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
-      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
-      allow update: if isAdmin();
-      allow delete: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          'userId', 'type', 'name', 'email', 'subject', 'message', 'rating',
+          'status', 'createdAt'
+        ])
+        && request.resource.data.status == 'open';
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update: if isAdmin()
+        && changed(['adminReply', 'repliedAt', 'updatedAt', 'status', 'resolvedAt'])
+        && request.resource.data.status in ['open', 'closed'];
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
     }
+
     match /learningContent/{id} { allow read: if signedIn(); allow write: if isAdmin(); }
     match /announcements/{id} { allow read: if signedIn(); allow write: if isAdmin(); }
     match /adminInvites/{id} { allow read, write: if isSuperAdmin(); }
-    match /adminAudit/{id} { allow create, read: if isAdmin(); allow update, delete: if false; }
+    match /adminAudit/{id} {
+      allow create: if isAdmin()
+        && request.resource.data.adminId == request.auth.uid
+        && request.resource.data.action is string
+        && request.resource.data.keys().hasOnly([
+          'adminId', 'action', 'targetId', 'createdAt'
+        ]);
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
     match /{document=**} { allow read, write: if false; }
   }
 }
