@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "94102493686",
+    "project_id": "pennypal-aymen",
+    "storage_bucket": "pennypal-aymen.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94102493686:android:c1b7b2025a697d0b038fd7",
+        "android_client_info": {
+          "package_name": "com.example.pennypal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94102493686-fie4ndr6f0lgn19hlb4gugp011v90c06.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pennypal",
+            "certificate_hash": "b21098e989fb9c43b35b3f90ff0a0842a0113d30"
+          }
+        },
+        {
+          "client_id": "94102493686-ra0f5lt114cf5g62ddd7edgdbdmuq5qk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjfHkTJdPcwXc-qMajpGRJKz9rCMGvUSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94102493686-ra0f5lt114cf5g62ddd7edgdbdmuq5qk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "94102493686-4vqsbrb9t0jhds2ub39ds39k2v8j7g5f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pennypal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

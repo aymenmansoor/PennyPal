@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function myUser() { return get(/databases/$(database)/documents/users/$(request.auth.uid)); }
+    function isAdmin() { return signedIn() && myUser().data.role in ['admin', 'superAdmin']; }
+    function isSuperAdmin() { return signedIn() && myUser().data.role == 'superAdmin'; }
+
+    match /users/{uid} {
+      allow create: if isOwner(uid) && request.resource.data.role in ['user', 'student'];
+      allow read: if isOwner(uid) || isAdmin();
+      allow update: if ((isOwner(uid) || isAdmin()) && request.resource.data.role == resource.data.role) || isSuperAdmin();
+      allow delete: if isOwner(uid) || isSuperAdmin();
+      match /transactions/{docId} { allow read, write: if isOwner(uid); }
+      match /budgets/{docId} { allow read, write: if isOwner(uid); }
+      match /savingsGoals/{docId} { allow read, write: if isOwner(uid); }
+      match /categories/{docId} { allow read, write: if isOwner(uid); }
+      match /{subcollection}/{docId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+    match /activityEvents/{id} {
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+    match /supportQueries/{id} {
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update: if isAdmin();
+      allow delete: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+    }
+    match /learningContent/{id} { allow read: if signedIn(); allow write: if isAdmin(); }
+    match /announcements/{id} { allow read: if signedIn(); allow write: if isAdmin(); }
+    match /adminInvites/{id} { allow read, write: if isSuperAdmin(); }
+    match /adminAudit/{id} { allow create, read: if isAdmin(); allow update, delete: if false; }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

@@ -1,0 +1,2 @@
+import 'package:flutter_test/flutter_test.dart';import 'package:pennypal/core/validators.dart';
+void main(){group('Validators',(){test('email rejects invalid input',()=>expect(Validators.email('bad'),isNotNull));test('email accepts normal address',()=>expect(Validators.email('student@example.com'),isNull));test('positive amount rejects zero',()=>expect(Validators.positiveAmount('0'),isNotNull));test('positive amount accepts value',()=>expect(Validators.positiveAmount('12.50'),isNull));});}

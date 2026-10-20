@@ -1,0 +1,44 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pennypal-aymen",
+          "configurations": {
+            "android": "1:94102493686:android:c1b7b2025a697d0b038fd7",
+            "ios": "1:94102493686:ios:8e183b229781f77c038fd7",
+            "web": "1:94102493686:web:37fa78566aecf0f7038fd7"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "pennypal-aymen",
+          "appId": "1:94102493686:android:c1b7b2025a697d0b038fd7",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
