@@ -1,13 +1,12 @@
 # Screenshots and Demo Media
 
-The portfolio README now contains genuine frames from the supplied PennyPal
+The portfolio README contains eight genuine frames from the supplied PennyPal
 competition demonstration. The committed images are optimized PNG crops with
-recorder controls and device chrome removed.
+recorder controls, device chrome, and the visible demo display name removed.
 
 ```text
 docs/screenshots/
   01-dashboard.png
-  02-financial-summary.png
   03-transactions.png
   04-budgets.png
   05-reports.png
@@ -17,10 +16,11 @@ docs/screenshots/
   09-admin-learning.png
 ```
 
-The source material was supplied by the project owner. It contains the display
-name `John` and fictional-looking financial values; confirm that this name is
-synthetic or approved before publishing publicly. No email address, password,
-API key, token, or personal financial record was visible during inspection.
+The source material was supplied by the project owner. The public crops use
+synthetic-looking financial values and replace the visible display name with
+`Demo user`. Screens showing names, email addresses, phone numbers, or account
+records were excluded from the public gallery. No password, API key, or token
+is included.
 
 For future captures, use synthetic data only. Remove email addresses, user IDs,
 tokens, personal financial records, and browser notifications. Use consistent

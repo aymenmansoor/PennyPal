@@ -41,21 +41,21 @@ The application helps students record income and expenses, manage budgets, track
 
 ## Screenshots
 
-These are genuine frames from the PennyPal competition demonstration, cleaned
-only to remove recorder controls and device chrome. The supplied test data uses
-fictional financial values; review the visible display name before publishing.
+These are eight genuine frames from the PennyPal competition demonstration.
+They were cleaned only to remove recorder controls, device chrome, and the
+visible demo display name. The values are synthetic demonstration data.
 
 | Dashboard | Transactions | Budgets |
 | --- | --- | --- |
 | ![PennyPal dashboard](docs/screenshots/01-dashboard.png) | ![Transaction history](docs/screenshots/03-transactions.png) | ![Budget management](docs/screenshots/04-budgets.png) |
 
-| Reports | Savings goals | Financial summary |
+| Reports | Savings goals | Learning Hub |
 | --- | --- | --- |
-| ![Reports and insights](docs/screenshots/05-reports.png) | ![Savings goals](docs/screenshots/06-savings-goals.png) | ![Financial summary](docs/screenshots/02-financial-summary.png) |
+| ![Reports and insights](docs/screenshots/05-reports.png) | ![Savings goals](docs/screenshots/06-savings-goals.png) | ![Learning Hub](docs/screenshots/07-learning-hub.png) |
 
-| Learning Hub | Admin dashboard | Admin learning content |
-| --- | --- | --- |
-| ![Learning Hub](docs/screenshots/07-learning-hub.png) | ![Admin dashboard](docs/screenshots/08-admin-dashboard.png) | ![Admin learning content](docs/screenshots/09-admin-learning.png) |
+| Admin dashboard | Admin learning content |
+| --- | --- |
+| ![Admin dashboard](docs/screenshots/08-admin-dashboard.png) | ![Admin learning content](docs/screenshots/09-admin-learning.png) |
 
 See the [screenshot guide](docs/screenshots/README.md) for provenance and
 privacy precautions.
