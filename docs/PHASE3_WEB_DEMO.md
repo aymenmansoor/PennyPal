@@ -15,7 +15,19 @@ flutterfire configure --project=pennypal-staging
 ```
 
 Review generated Firebase configuration before use. Keep staging and production
-configuration separate and never commit service-account credentials.
+configuration separate. The repository includes
+`config/firebase_options.staging.dart.example`; generated staging output belongs
+in the ignored `lib/firebase_options.staging.dart` path and must not be
+committed. The checked-in `lib/firebase_options.dart` remains production
+configuration until an approved build-configuration change is made.
+
+Confirm the active Firebase project before every deploy:
+
+```bash
+firebase projects:list
+firebase use pennypal-staging
+firebase use
+```
 
 ## Deployment workflow
 
@@ -39,6 +51,26 @@ firebase deploy --only functions
 
 Production deployment requires explicit owner approval and an explicit project
 selection. Do not use credentials or tokens in repository files.
+
+## Rollback
+
+Record the deployed commit and Hosting release before staging deployment. To
+roll back safely, check out the last approved commit, rebuild, and redeploy to
+the explicitly selected staging project:
+
+```bash
+git fetch origin
+git checkout <known-good-commit>
+flutter pub get
+flutter build web --release
+firebase deploy --project pennypal-staging --only hosting
+firebase deploy --project pennypal-staging --only firestore:rules,firestore:indexes
+firebase deploy --project pennypal-staging --only functions
+```
+
+Return to the feature branch after rollback verification. Do not use these
+commands against production without owner approval and a recorded rollback
+plan.
 
 ## Staging verification
 

@@ -1,0 +1,15 @@
+// Copy this file to lib/firebase_options.staging.dart only in a local staging
+// worktree, then replace placeholders using FlutterFire CLI output.
+// Do not commit the generated staging file.
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+
+class StagingFirebaseOptions {
+  static const web = FirebaseOptions(
+    apiKey: '<STAGING_WEB_API_KEY>',
+    appId: '<STAGING_WEB_APP_ID>',
+    messagingSenderId: '<STAGING_MESSAGING_SENDER_ID>',
+    projectId: '<STAGING_PROJECT_ID>',
+    authDomain: '<STAGING_PROJECT_ID>.firebaseapp.com',
+    storageBucket: '<STAGING_STORAGE_BUCKET>',
+  );
+}

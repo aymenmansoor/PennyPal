@@ -121,6 +121,16 @@ synthetic staging data. The recording checklist is in
 - [Android and Play release preparation](docs/ANDROID_RELEASE.md)
 - [Account deletion deployment notes](docs/ACCOUNT_DELETION.md)
 
+## Live demo
+
+No public demo URL is published yet. The link will be added here only after the
+staging smoke test, security review, and deployment approval are complete.
+
+## Store links
+
+Google Play and Apple App Store links will be added after store review and
+publication. No non-working or placeholder links are included.
+
 ## Security and project scope
 
 - Do not commit passwords, service-account private keys, or real users' financial records.
