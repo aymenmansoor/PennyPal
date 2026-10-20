@@ -1,5 +1,7 @@
 const {onDocumentCreated, onDocumentWritten} = require('firebase-functions/v2/firestore');
 const {onSchedule} = require('firebase-functions/v2/scheduler');
+const functions = require('firebase-functions/v1');
+const {cleanupDeletedUser} = require('./user_cleanup');
 const admin = require('firebase-admin');
 admin.initializeApp();
 const db = admin.firestore();
@@ -64,4 +66,12 @@ exports.onSavingsGoalWritten = onDocumentWritten('users/{uid}/savingsGoals/{goal
 exports.dailyGoalReminders = onSchedule('every day 09:00', async () => {
   const users=await db.collection('users').where('notificationsEnabled','==',true).get();
   for(const user of users.docs){const goals=await db.collection(`users/${user.id}/savingsGoals`).where('status','==','active').get();if(goals.empty)continue;const due=goals.docs.filter(d=>{const x=d.data();const dt=x.targetDate?.toDate?.();return dt&&dt>Date.now()&&dt-Date.now()<1000*60*60*24*30;});if(due.length)await push(user.id,'Savings goal check-in',`${due.length} goal${due.length===1?' is':'s are'} due within the next 30 days.`,{screen:'goals'});}
+});
+
+exports.cleanupDeletedUser = functions.runWith({failurePolicy: true}).auth.user().onDelete(async (user) => {
+  await cleanupDeletedUser({
+    db,
+    uid: user.uid,
+    fieldValue: admin.firestore.FieldValue,
+  });
 });

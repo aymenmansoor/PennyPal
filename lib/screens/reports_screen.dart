@@ -24,17 +24,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
       body: StreamBuilder<List<TransactionEntry>>(
         stream: FirestoreService.instance.transactions(uid),
         builder: (context, s) {
-          if (!s.hasData)
+          if (!s.hasData) {
             return const Center(child: CircularProgressIndicator());
+          }
           final cutoff = DateTime.now().subtract(Duration(days: days));
           final all = s.data!.where((x) => x.date.isAfter(cutoff)).toList();
-          if (all.isEmpty)
+          if (all.isEmpty) {
             return const EmptyState(
               icon: Icons.insights_outlined,
               title: 'No insights yet',
               message:
                   'Add transactions and PennyPal will turn them into useful trends.',
             );
+          }
           final income = all.where((x) => x.type == 'income').toList();
           final expenses = all.where((x) => x.type == 'expense').toList();
           final ti = income.fold<double>(0, (a, b) => a + b.amount),

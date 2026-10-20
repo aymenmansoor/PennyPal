@@ -1,112 +1,88 @@
-# PennyPal
+# PennyPal 💸
 
-**A cross-platform student finance companion built with Flutter and Firebase.**
+### Smart budgeting for student life
 
-PennyPal helps students track income and expenses, set monthly budgets, work toward savings goals, understand their spending, and develop financial literacy. It includes a student experience and a role-restricted administration interface.
+**PennyPal** is a cross-platform personal-finance application created for **Aptech TechWiz 7 — Multi-Platform App Computing**. It helps students understand where their money goes, build better spending habits, and work toward savings goals.
 
-> **Status:** Educational / portfolio project. Features below describe the codebase; they are not a guarantee that every workflow has passed end-to-end testing.
+**Built with:** Flutter · Dart · Firebase Authentication · Cloud Firestore · Firebase Cloud Functions
 
-## Features
+**Project:** Completed competition submission · Open-source portfolio project
 
-### Student app
-- **Authentication:** Email/password sign-up and sign-in, email verification, password reset, and Google Sign-In.
-- **Income and expenses:** Create and manage transactions, with searchable and filterable history.
-- **Dashboard:** Balance, recent transactions, and financial summaries.
-- **Budgets:** Overall and category-specific monthly limits, spending progress, and threshold alerts.
-- **Savings goals:** Targets, contributions, progress tracking, and reminders.
-- **Reports:** Income/expense summaries and spending-category breakdowns.
-- **Learning Hub:** Financial education content.
-- **PennyPal assistant:** Context-aware, rule-based guidance about the app and recorded finances. It is not an externally hosted generative-AI service.
-- **Personalisation:** Currency preferences, theme selection, and notification settings.
-- **Support:** Feedback and support requests.
+---
 
-### Admin portal
-- Role-restricted dashboard and user management.
-- Support-query management, learning content, and announcements.
-- Analytics and administrator-role workflows.
+## 📱 App screenshots
 
-**Known issue:** The admin support-reply action has been reported to show an error. It should be investigated and retested before a production release.
+*Actual screenshots captured from the PennyPal competition demonstration, using demonstration data.*
 
-## Tech stack
+| Student Dashboard | Transactions | Budgets |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/01-dashboard.png" alt="PennyPal student dashboard" width="260"> | <img src="docs/screenshots/03-transactions.png" alt="PennyPal transactions" width="260"> | <img src="docs/screenshots/04-budgets.png" alt="PennyPal budgets" width="260"> |
 
-| Area | Technology |
+| Spending Reports | Savings Goals | Learning Hub |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/05-reports.png" alt="PennyPal spending reports" width="260"> | <img src="docs/screenshots/06-savings-goals.png" alt="PennyPal savings goals" width="260"> | <img src="docs/screenshots/07-learning-hub.png" alt="PennyPal learning hub" width="260"> |
+
+| Admin Dashboard | Learning Content Management |
+| :---: | :---: |
+| <img src="docs/screenshots/08-admin-dashboard.png" alt="PennyPal admin dashboard" width="330"> | <img src="docs/screenshots/09-admin-learning.png" alt="PennyPal admin learning management" width="330"> |
+
+## ✨ What PennyPal does
+
+- **Income and expense tracking** — Add, edit, search, and filter transactions.
+- **Smart budgets** — Set monthly and category spending limits with progress and threshold notifications.
+- **Savings goals** — Set targets and track how much has been saved.
+- **Visual reports** — Explore balances, spending patterns, and category breakdowns.
+- **Financial Learning Hub** — Learn everyday money-management concepts.
+- **PennyPal guidance** — Receive context-aware, rule-based financial education tips.
+- **Personalisation** — Currency preferences, light/dark themes, and notification settings.
+- **Authentication** — Email/password and Google Sign-In, email verification, and password recovery.
+- **Administration** — Role-restricted views for managing users, support queries, announcements, and learning content.
+
+## 🛠 Technology
+
+| Component | Stack |
 | --- | --- |
-| UI | Flutter / Dart |
+| Application UI | Flutter and Dart |
 | Authentication | Firebase Authentication |
 | Database | Cloud Firestore |
-| Notifications | Firebase Cloud Messaging and Cloud Functions |
-| Local preferences | Shared Preferences |
-| Project targets | Android, iOS, and Web |
+| Cloud services | Firebase Cloud Functions and Cloud Messaging |
+| Preferences | Shared Preferences |
+| Target platforms | Android, iOS, Web |
+| Continuous integration | GitHub Actions |
 
-Firestore offline persistence is enabled in the app. Offline write/sync behaviour should be tested separately on each target platform.
+## 🚀 Run the project locally
 
-## Repository structure
+Install a Flutter SDK compatible with `pubspec.yaml` and set up a Firebase project for your own testing. Firebase Authentication and Firestore require corresponding configuration.
 
-```text
-lib/
-  core/        # Shared app foundations and theming
-  models/      # Application data models
-  screens/     # Student, authentication, and admin screens
-  services/    # Firebase and application services
-  widgets/     # Reusable UI components
-functions/     # Firebase Cloud Functions
-android/       # Android project
-ios/           # iOS project
-web/           # Web project
-test/          # Flutter tests
-firestore.rules
-firestore.indexes.json
-firebase.json
+```bash
+git clone https://github.com/aymenmansoor/PennyPal.git
+cd PennyPal
+flutter pub get
+flutter run -d chrome
 ```
 
-## Getting started
-
-**Prerequisites:** A Flutter SDK compatible with `pubspec.yaml`, platform-specific development tools, and a Firebase project.
-
-1. Clone and install dependencies:
-
-   ```bash
-   git clone https://github.com/aymenmansoor/PennyPal.git
-   cd PennyPal
-   flutter pub get
-   ```
-
-2. Configure Firebase for your environment. Review `lib/firebase_options.dart` and `firebase.json`; enable the Authentication providers and Firebase services used by the app. To generate configuration for your own Firebase project:
-
-   ```bash
-   flutterfire configure
-   ```
-
-3. List available devices and launch the app:
-
-   ```bash
-   flutter devices
-   flutter run -d chrome
-   ```
-
-4. Review Firestore security rules and indexes before deploying them to a Firebase project you control:
-
-   ```bash
-   firebase deploy --only firestore:rules,firestore:indexes
-   ```
-
-Cloud Functions live in `functions/` and require separate deployment and appropriate Firebase project configuration.
-
-## Development checks
+To check the project:
 
 ```bash
 flutter analyze
 flutter test
+flutter build web --release
 ```
 
-These are recommended checks, not a claim that all tests currently pass. Before a release, also verify authentication, Firestore permissions, offline synchronisation, notifications, and admin support workflows.
+## 📁 Project structure
 
-## Security and project scope
+```text
+lib/                Flutter app screens, models, services and widgets
+android/            Android application
+ios/                iOS application
+web/                Flutter web application
+functions/          Firebase Cloud Functions
+test/               Flutter and rules tests
+docs/screenshots/   Application screenshot gallery
+docs/               Additional technical documentation
+```
 
-- Do not commit passwords, service-account private keys, or real users' financial records.
-- Review and test Firebase rules before deployment.
-- PennyPal is an educational budgeting application. It does **not** connect to bank accounts, hold or transfer funds, process card payments, or provide professional financial or investment advice.
+## 🏆 Project background
 
-## About
+Developed for the **Aptech TechWiz 7** global competition in the **Multi-Platform App Computing** category. This repository showcases the completed project and subsequent improvements to testing, reliability, and documentation.
 
-PennyPal is a multi-platform student finance application project focused on approachable budgeting, saving, and everyday financial education.

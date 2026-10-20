@@ -57,8 +57,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     final suggestion = ExpenseCategorizerService.instance.suggest(
       description.text,
     );
-    if (suggestion != aiSuggestion && mounted)
+    if (suggestion != aiSuggestion && mounted) {
       setState(() => aiSuggestion = suggestion);
+    }
   }
 
   @override

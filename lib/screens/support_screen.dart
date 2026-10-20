@@ -250,13 +250,14 @@ class _SupportScreenState extends State<SupportScreen> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting &&
-                  !snapshot.hasData)
+                  !snapshot.hasData) {
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(20),
                     child: CircularProgressIndicator(),
                   ),
                 );
+              }
               final docs = snapshot.data?.docs ?? [];
               docs.sort((a, b) {
                 final at = a.data()['createdAt'] as Timestamp?;
@@ -265,7 +266,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   at?.millisecondsSinceEpoch ?? 0,
                 );
               });
-              if (docs.isEmpty)
+              if (docs.isEmpty) {
                 return const Card(
                   child: Padding(
                     padding: EdgeInsets.all(22),
@@ -274,6 +275,7 @@ class _SupportScreenState extends State<SupportScreen> {
                     ),
                   ),
                 );
+              }
               return Column(
                 children: docs.map((doc) {
                   final x = doc.data();

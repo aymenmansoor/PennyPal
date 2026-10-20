@@ -68,7 +68,7 @@ class PageHeading extends StatelessWidget {
             ],
           ),
         ),
-        if (action != null) action!,
+        ?action,
       ],
     );
   }
