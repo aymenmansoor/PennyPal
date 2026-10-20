@@ -2,17 +2,15 @@
 
 ### Smart budgeting for student life
 
-**PennyPal** is a cross-platform personal-finance application created for **Aptech TechWiz 7 — Multi-Platform App Computing**. It helps students understand where their money goes, build better spending habits, and work toward savings goals.
+**PennyPal** is a cross-platform personal finance application built to make everyday money management easier for students. Track income and expenses, plan budgets, monitor savings goals, and explore spending insights through an intuitive interface.
 
 **Built with:** Flutter · Dart · Firebase Authentication · Cloud Firestore · Firebase Cloud Functions
-
-**Project:** Completed competition submission · Open-source portfolio project
 
 ---
 
 ## 📱 App screenshots
 
-*Actual screenshots captured from the PennyPal competition demonstration, using demonstration data.*
+*Screenshots of the PennyPal application featuring demonstration data.*
 
 | Student Dashboard | Transactions | Budgets |
 | :---: | :---: | :---: |
@@ -81,8 +79,4 @@ test/               Flutter and rules tests
 docs/screenshots/   Application screenshot gallery
 docs/               Additional technical documentation
 ```
-
-## 🏆 Project background
-
-Developed for the **Aptech TechWiz 7** global competition in the **Multi-Platform App Computing** category. This repository showcases the completed project and subsequent improvements to testing, reliability, and documentation.
 
