@@ -1,142 +1,104 @@
 # PennyPal
 
-**A cross-platform student finance companion built with Flutter and Firebase.**
+**A student personal-finance application built with Flutter and Firebase.**
 
-PennyPal helps students track income and expenses, set monthly budgets, work toward savings goals, understand their spending, and develop financial literacy. It includes a student experience and a role-restricted administration interface.
+PennyPal was developed as a completed student competition project for **Aptech TechWiz 7** in the **Multi-Platform App Computing** category. This repository preserves the source code, documentation, and subsequent maintenance work as part of a software-development portfolio.
 
-> **Status:** Educational / portfolio project. Features below describe the codebase; they are not a guarantee that every workflow has passed end-to-end testing.
+The application helps students record income and expenses, manage budgets, track savings goals, explore spending reports, and learn practical financial habits.
+
+> **Project status:** Competition completed · Portfolio / maintenance repository. This is not advertised as a live financial service or a published app-store product.
 
 ## Features
 
-### Student app
-- **Authentication:** Email/password sign-up and sign-in, email verification, password reset, and Google Sign-In.
-- **Income and expenses:** Create and manage transactions, with searchable and filterable history.
-- **Dashboard:** Balance, recent transactions, and financial summaries.
-- **Budgets:** Overall and category-specific monthly limits, spending progress, and threshold alerts.
-- **Savings goals:** Targets, contributions, progress tracking, and reminders.
-- **Reports:** Income/expense summaries and spending-category breakdowns.
-- **Learning Hub:** Financial education content.
-- **PennyPal assistant:** Context-aware, rule-based guidance about the app and recorded finances. It is not an externally hosted generative-AI service.
-- **Personalisation:** Currency preferences, theme selection, and notification settings.
-- **Support:** Feedback and support requests.
+### Student experience
 
-### Admin portal
-- Role-restricted dashboard and user management.
-- Support-query management, learning content, and announcements.
-- Analytics and administrator-role workflows.
+- **Accounts:** Email/password registration and login, email verification, password reset, and Google Sign-In.
+- **Transactions:** Record and manage income and expenses, search history, and filter transactions.
+- **Dashboard:** Review balances, summaries, and recent activity.
+- **Budgets:** Set monthly and category-based spending limits and receive threshold alerts.
+- **Savings goals:** Track targets, contributions, and progress.
+- **Reports:** View income, expenses, and category-based spending summaries.
+- **Learning Hub:** Access educational financial-literacy content.
+- **PennyPal assistant:** Receive contextual, rule-based guidance. This is not a hosted generative AI model.
+- **Preferences and support:** Manage currency/theme preferences, notifications, and support requests.
 
-**Known issue:** The admin support-reply action has been reported to show an error. It should be investigated and retested before a production release.
+### Administration
 
-## Tech stack
+- Role-restricted administration screens.
+- User, learning-content, support-query, and announcement management.
+- Administrative analytics and role-based workflows.
+
+## Technologies
 
 | Area | Technology |
 | --- | --- |
-| UI | Flutter / Dart |
+| Application | Flutter / Dart |
 | Authentication | Firebase Authentication |
 | Database | Cloud Firestore |
-| Notifications | Firebase Cloud Messaging and Cloud Functions |
+| Notifications | Firebase Cloud Messaging / Cloud Functions |
 | Local preferences | Shared Preferences |
-| Project targets | Android, iOS, and Web |
+| Project targets | Android, iOS, Web |
 
-Firestore offline persistence is enabled in the app. Offline write/sync behaviour should be tested separately on each target platform.
+## Screenshots
 
-## Repository structure
+Screenshots of the **actual PennyPal application** may be added to `docs/screenshots/`. See the [screenshot guide](docs/screenshots/README.md) for suggested views and privacy precautions.
+
+No fabricated screenshots are included. A hosted demo or recorded walkthrough is **optional** for this portfolio repository.
+
+## Repository layout
 
 ```text
-lib/
-  core/        # Shared app foundations and theming
-  models/      # Application data models
-  screens/     # Student, authentication, and admin screens
-  services/    # Firebase and application services
-  widgets/     # Reusable UI components
-functions/     # Firebase Cloud Functions
-android/       # Android project
-ios/           # iOS project
-web/           # Web project
-test/          # Flutter tests
-docs/            # Release, staging, and media documentation
-firestore.rules
+lib/                 Flutter application source
+android/             Android project
+ios/                 iOS project
+web/                 Web project
+functions/           Firebase Cloud Functions
+test/                Flutter tests
+docs/                Technical documentation and screenshot guidance
+firestore.rules      Firestore access rules
 firestore.indexes.json
 firebase.json
 ```
 
-## Getting started
+## Run locally
 
-**Prerequisites:** A Flutter SDK compatible with `pubspec.yaml`, platform-specific development tools, and a Firebase project.
+A compatible Flutter SDK and a correctly configured Firebase project are required. Running this repository against your own Firebase project may require Authentication providers, Firestore rules, and other services to be configured.
 
-1. Clone and install dependencies:
+```bash
+git clone https://github.com/aymenmansoor/PennyPal.git
+cd PennyPal
+flutter pub get
+flutter run -d chrome
+```
 
-   ```bash
-   git clone https://github.com/aymenmansoor/PennyPal.git
-   cd PennyPal
-   flutter pub get
-   ```
+Review Firebase configuration before running the app; do not assume that the repository includes credentials or access to a working backend.
 
-2. Configure Firebase for your environment. Review `lib/firebase_options.dart` and `firebase.json`; enable the Authentication providers and Firebase services used by the app. To generate configuration for your own Firebase project:
-
-   ```bash
-   flutterfire configure
-   ```
-
-3. List available devices and launch the app:
-
-   ```bash
-   flutter devices
-   flutter run -d chrome
-   ```
-
-4. Review Firestore security rules and indexes before deploying them to a Firebase project you control:
-
-   ```bash
-   firebase deploy --only firestore:rules,firestore:indexes
-   ```
-
-Cloud Functions live in `functions/` and require separate deployment and appropriate Firebase project configuration.
-
-## Development checks
+## Checks
 
 ```bash
 flutter analyze
 flutter test
+flutter build web --release
 ```
 
-Before a release, also verify authentication, Firestore permissions, offline synchronisation, notifications, and admin support workflows.
+The repository also contains automated tests for Firestore permissions and Cloud Function cleanup, with a GitHub Actions CI workflow on the maintenance branch. Passing automated tests does not prove all live Firebase workflows work in every environment.
 
-## Screenshots
+## Maintenance notes
 
-The portfolio gallery will be populated with approved screenshots from synthetic
-staging data. Capture guidance and the folder structure are in
-[`docs/screenshots/README.md`](docs/screenshots/README.md). No placeholder or
-invented images are included.
+The competition version has been followed by maintenance work focusing on Firestore validation, account deletion, admin support handling, and regression tests. Review the repository history and pull requests to distinguish the original submission from subsequent improvements.
 
-## Demo video
+Additional documentation is available for [account deletion](docs/ACCOUNT_DELETION.md), [web deployment considerations](docs/PHASE3_WEB_DEMO.md), and [Android release considerations](docs/ANDROID_RELEASE.md). These are reference materials, **not a commitment to release or deploy PennyPal**.
 
-An approved walkthrough video link will be added here after recording with
-synthetic staging data. The recording checklist is in
-[`docs/screenshots/README.md`](docs/screenshots/README.md).
+The original admin support-reply error was reported in use but has not been reproduced in emulator tests; production behaviour remains unverified.
 
-## Release documentation
+## Educational scope
 
-- [Staging web demo plan](docs/PHASE3_WEB_DEMO.md)
-- [Android and Play release preparation](docs/ANDROID_RELEASE.md)
-- [Account deletion deployment notes](docs/ACCOUNT_DELETION.md)
+PennyPal is an educational and portfolio project. It does not connect to bank accounts, hold or transfer funds, process card payments, or provide professional financial or investment advice.
 
-## Live demo
+Avoid committing credentials, service-account private keys, or real users' financial records.
 
-No public demo URL is published yet. The link will be added here only after the
-staging smoke test, security review, and deployment approval are complete.
+## Project context
 
-## Store links
-
-Google Play and Apple App Store links will be added after store review and
-publication. No non-working or placeholder links are included.
-
-## Security and project scope
-
-- Do not commit passwords, service-account private keys, or real users' financial records.
-- Review and test Firebase rules before deployment.
-- PennyPal is an educational budgeting application. It does **not** connect to bank accounts, hold or transfer funds, process card payments, or provide professional financial or investment advice.
-
-## About
-
-PennyPal is a multi-platform student finance application project focused on approachable budgeting, saving, and everyday financial education.
+**Competition:** Aptech TechWiz 7  
+**Category:** Multi-Platform App Computing  
+**Status:** Completed competition project, preserved for portfolio and maintenance.
