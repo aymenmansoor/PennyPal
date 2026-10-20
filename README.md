@@ -50,10 +50,6 @@
 | Target platforms | Android, iOS, Web |
 | Continuous integration | GitHub Actions |
 
-## 🌐 Live demo
-
-A public browser demo is **not yet available**. The screenshots above show the actual competition application. A demo link will be added here when hosting is configured and verified.
-
 ## 🚀 Run the project locally
 
 Install a Flutter SDK compatible with `pubspec.yaml` and set up a Firebase project for your own testing. Firebase Authentication and Firestore require corresponding configuration.
@@ -73,8 +69,6 @@ flutter test
 flutter build web --release
 ```
 
-The included Firebase configuration refers to the original development project. Use your own Firebase configuration and verify the security rules before connecting a new backend.
-
 ## 📁 Project structure
 
 ```text
@@ -92,4 +86,3 @@ docs/               Additional technical documentation
 
 Developed for the **Aptech TechWiz 7** global competition in the **Multi-Platform App Computing** category. This repository showcases the completed project and subsequent improvements to testing, reliability, and documentation.
 
-PennyPal is an educational finance-management project, not a banking, payment-processing, or investment-advice service.
