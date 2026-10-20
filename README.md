@@ -45,6 +45,13 @@ Screenshots of the **actual PennyPal application** may be added to `docs/screens
 
 No fabricated screenshots are included. A hosted demo or recorded walkthrough is **optional** for this portfolio repository.
 
+## Live demo
+
+No public demo URL has been published yet. A verified Hosting URL will be added
+after the isolated demo project is approved, deployed, and tested anonymously.
+The launch and GitHub profile handoff is documented in
+[`docs/PORTFOLIO_DEMO.md`](docs/PORTFOLIO_DEMO.md).
+
 ## Repository layout
 
 ```text
