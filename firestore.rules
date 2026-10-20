@@ -63,11 +63,24 @@ service cloud.firestore {
         && request.resource.data.name is string;
     }
 
+    function validContent() {
+      return request.resource.data.keys().hasOnly([
+        'title', 'body', 'published', 'createdAt', 'updatedAt'
+      ]) && request.resource.data.title is string
+        && request.resource.data.body is string
+        && request.resource.data.published is bool;
+    }
+
     match /users/{uid} {
       allow create: if isOwner(uid) && validUserProfile()
         && request.resource.data.role in ['user', 'student'];
       allow read: if isOwner(uid) || isAdmin();
-      allow update: if isSuperAdmin()
+      allow update: if (isSuperAdmin()
+          && changed([
+            'name', 'email', 'mobile', 'role', 'countryCode', 'currencyCode',
+            'currencySymbol', 'notificationsEnabled', 'onboardingComplete',
+            'createdAt', 'updatedAt'
+          ]))
         || ((isOwner(uid) || isAdmin())
           && changed([
             'name', 'email', 'mobile', 'countryCode', 'currencyCode',
@@ -134,8 +147,16 @@ service cloud.firestore {
         || (signedIn() && resource.data.userId == request.auth.uid);
     }
 
-    match /learningContent/{id} { allow read: if signedIn(); allow write: if isAdmin(); }
-    match /announcements/{id} { allow read: if signedIn(); allow write: if isAdmin(); }
+    match /learningContent/{id} {
+      allow read: if signedIn();
+      allow create, update: if isAdmin() && validContent();
+      allow delete: if isAdmin();
+    }
+    match /announcements/{id} {
+      allow read: if signedIn();
+      allow create, update: if isAdmin() && validContent();
+      allow delete: if isAdmin();
+    }
     match /adminInvites/{id} { allow read, write: if isSuperAdmin(); }
     match /adminAudit/{id} {
       allow create: if isAdmin()

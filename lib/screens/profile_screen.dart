@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../core/app_theme.dart';
 import '../services/auth_service.dart';
 import '../services/account_deletion_service.dart';
-import '../services/firestore_service.dart';
 import '../widgets/responsive_layout.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -58,6 +57,7 @@ class ProfileScreen extends StatelessWidget {
         ) ??
         false;
     if (!ok) return;
+    if (!context.mounted) return;
     try {
       final user = FirebaseAuth.instance.currentUser!;
       final needsPassword = user.providerData.any(

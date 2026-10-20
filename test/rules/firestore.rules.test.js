@@ -128,6 +128,47 @@ describe('PennyPal Firestore permissions', () => {
     }));
   });
 
+  it('allows legitimate student profile and finance writes', async () => {
+    const student = userContext('student-1', 'student').firestore();
+    await assertSucceeds(updateDoc(doc(student, 'users/student-1'), {
+      currencyCode: 'USD',
+      currencySymbol: '$',
+      updatedAt: now,
+    }));
+    await assertSucceeds(setDoc(doc(student, 'users/student-1/budgets/2026-01_Overall'), {
+      userId: 'student-1', month: '2026-01', category: 'Overall',
+      limitAmount: 100, updatedAt: now,
+    }));
+    await assertSucceeds(setDoc(doc(student, 'users/student-1/savingsGoals/g1'), {
+      userId: 'student-1', name: 'Emergency fund', targetAmount: 500,
+      currentAmount: 50, monthlyContribution: 50, targetDate: now,
+      status: 'active', updatedAt: now,
+    }));
+    await assertSucceeds(setDoc(doc(student, 'users/student-1/categories/c1'), {
+      type: 'expense', name: 'Books', colorValue: 1, iconName: 'book', createdAt: now,
+    }));
+    await assertSucceeds(setDoc(doc(student, 'users/student-1/devices/token-1'), {
+      token: 'token-1', updatedAt: now,
+    }));
+    await assertSucceeds(setDoc(doc(student, 'supportQueries/q2'), {
+      userId: 'student-1', type: 'support', name: 'Student',
+      email: 'student@example.com', subject: 'Question', message: 'Help',
+      rating: null, status: 'open', createdAt: now,
+    }));
+  });
+
+  it('allows valid admin content and rejects extra fields', async () => {
+    const admin = userContext('admin-1', 'admin').firestore();
+    await assertSucceeds(setDoc(doc(admin, 'announcements/a1'), {
+      title: 'Update', body: 'A valid announcement.', published: true,
+      createdAt: now, updatedAt: now,
+    }));
+    await assertFails(setDoc(doc(admin, 'announcements/a2'), {
+      title: 'Update', body: 'Invalid', published: true, privateNote: 'secret',
+      createdAt: now, updatedAt: now,
+    }));
+  });
+
   it('allows only Super Admins to change roles', async () => {
     const admin = userContext('admin-1', 'admin').firestore();
     const superAdmin = userContext('super-1', 'superAdmin').firestore();
