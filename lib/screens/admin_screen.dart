@@ -427,7 +427,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   ],
                 ),
               ),
-              if (action != null) action,
+              ?action,
             ],
           ),
         SizedBox(height: mobile ? 18 : 24),
@@ -1121,7 +1121,7 @@ class _AdminScreenState extends State<AdminScreen> {
                       ),
                     ),
                   );
-                  if (!wide)
+                  if (!wide) {
                     return Column(
                       children: [
                         resolution,
@@ -1129,6 +1129,7 @@ class _AdminScreenState extends State<AdminScreen> {
                         activityCard,
                       ],
                     );
+                  }
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1319,8 +1320,9 @@ class _AdminScreenState extends State<AdminScreen> {
                       ),
                       PopupMenuButton<String>(
                         onSelected: (value) async {
-                          if (value == 'edit')
+                          if (value == 'edit') {
                             await editor(collection, doc: document);
+                          }
                           if (value == 'toggle') {
                             await document.reference.update({
                               'published': !(data['published'] ?? true),
@@ -1360,7 +1362,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                 ),
               );
-            }).toList()],
+            })],
           );
         },
       ),

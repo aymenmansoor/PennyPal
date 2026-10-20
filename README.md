@@ -54,6 +54,7 @@ android/       # Android project
 ios/           # iOS project
 web/           # Web project
 test/          # Flutter tests
+docs/            # Release, staging, and media documentation
 firestore.rules
 firestore.indexes.json
 firebase.json
@@ -99,7 +100,26 @@ flutter analyze
 flutter test
 ```
 
-These are recommended checks, not a claim that all tests currently pass. Before a release, also verify authentication, Firestore permissions, offline synchronisation, notifications, and admin support workflows.
+Before a release, also verify authentication, Firestore permissions, offline synchronisation, notifications, and admin support workflows.
+
+## Screenshots
+
+The portfolio gallery will be populated with approved screenshots from synthetic
+staging data. Capture guidance and the folder structure are in
+[`docs/screenshots/README.md`](docs/screenshots/README.md). No placeholder or
+invented images are included.
+
+## Demo video
+
+An approved walkthrough video link will be added here after recording with
+synthetic staging data. The recording checklist is in
+[`docs/screenshots/README.md`](docs/screenshots/README.md).
+
+## Release documentation
+
+- [Staging web demo plan](docs/PHASE3_WEB_DEMO.md)
+- [Android and Play release preparation](docs/ANDROID_RELEASE.md)
+- [Account deletion deployment notes](docs/ACCOUNT_DELETION.md)
 
 ## Security and project scope
 

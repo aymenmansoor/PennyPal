@@ -27,10 +27,11 @@ class ProfileScreen extends StatelessWidget {
     final email = FirebaseAuth.instance.currentUser?.email;
     if (email == null) return;
     await AuthService.instance.sendPasswordReset(email);
-    if (context.mounted)
+    if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Password reset email sent.')),
       );
+    }
   }
 
   Future<void> _deleteAccount(BuildContext context) async {
@@ -67,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
       if (password == null && needsPassword) return;
       await AccountDeletionService.firebase().delete(password: password);
     } on FirebaseAuthException catch (e) {
-      if (context.mounted)
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -77,11 +78,13 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         );
+      }
     } catch (_) {
-      if (context.mounted)
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Account deletion failed. Please try again.')),
         );
+      }
     }
   }
 
